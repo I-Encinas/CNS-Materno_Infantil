@@ -13,13 +13,13 @@ return new class extends Migration
     {
         Schema::create('employees', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('services_id')->nullable(false)->constrained('services')->cascadeOnUpdate()->cascadeOnDelete();
-            $table->string('name',25)->nullable(false);
-            $table->string('paternal surname',25)->nullable(false);
-            $table->string('maternal surname',25)->nullable(true);
+            $table->string('name',20)->nullable(false);
+            $table->string('paternal surname',20)->nullable(false);
+            $table->string('maternal surname',20)->nullable(true);
             $table->string('address',45)->nullable(true);
-            $table->string('phone',15)->nullable(false);
+            $table->string('phone',15)->nullable(true);
             
+            // $table->dateTime('birth date');
             $table->timestamps();
         });
     }
