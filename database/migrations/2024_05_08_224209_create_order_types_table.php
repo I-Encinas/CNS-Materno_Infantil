@@ -11,9 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->foreignId('employee_id')->nullable()->constrained()-> onUpdate('cascade')->onDelete('cascade');
-
+        Schema::create('order_types', function (Blueprint $table) {
+            $table->id();
+            $table->string('name',25)->nullable(false);
+            $table->timestamps();
         });
     }
 
@@ -22,8 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('order_types');
     }
 };

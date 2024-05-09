@@ -9,22 +9,35 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-s-user-circle';
+    protected static ?string $navigationGroup = 'Users';
+    protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('employees_id')
-                    ->numeric(),
+                
+                Select::make('employee_id')
+                    ->relationship(
+                        name: 'employee',titleAttribute:null, modifyQueryUsing: fn (Builder $query) => $query->orderBy('paternal_surname')->orderBy('name')
+                    )
+                    ->getOptionLabelFromRecordUsing(fn (Model $record) => "{$record->ci}-{$record->paternal_surname} {$record->name}")
+                    ->searchable(['ci','paternal_surname', 'maternal_surname','name'])
+                    ->preload()
+                    ,
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
@@ -36,6 +49,7 @@ class UserResource extends Resource
                 Forms\Components\TextInput::make('password')
                     ->password()
                     ->required()
+                    ->hiddenOn('edit')
                     ->maxLength(255),
             ]);
     }
@@ -44,28 +58,30 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\SelectColumn::make('employees_id')
-                    ->label('Employees')
-                    // ->relationship(name:'employee', tittleAtribute:'name')
-                    ->value(fn ($record) => $record->employee->ci . '-' . $record->employee->name)
+                Tables\Columns\TextColumn::make('employee.ci')
 
-                    // ->numeric()
-                    ->sortable(),
+                ->sortable(query: function (Builder $query, string $direction): Builder {
+                    return $query
+                        ->orderBy('paternal_name', $direction)
+                        ->orderBy('first_name', $direction);
+                })->label('Employee - CI')
+                ,
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
-                // Tables\Columns\TextColumn::make('email_verified_at')
-                //     ->dateTime()
-                //     ->sortable(),
-                // Tables\Columns\TextColumn::make('created_at')
-                //     ->dateTime()
-                //     ->sortable()
-                //     ->toggleable(isToggledHiddenByDefault: true),
-                // Tables\Columns\TextColumn::make('updated_at')
-                //     ->dateTime()
-                //     ->sortable()
-                //     ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('email_verified_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('updated_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //

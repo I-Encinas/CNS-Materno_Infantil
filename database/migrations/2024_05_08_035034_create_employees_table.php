@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('employees', function (Blueprint $table) {
             $table->id();
+            $table->string('ci',10)->nullable(false);
             $table->string('name',20)->nullable(false);
-            $table->string('paternal surname',20)->nullable(false);
-            $table->string('maternal surname',20)->nullable(true);
+            $table->string('paternal_surname',20)->nullable(false);
+            $table->string('maternal_surname',20)->nullable(true);
             $table->string('address',45)->nullable(true);
             $table->string('phone',15)->nullable(true);
             
