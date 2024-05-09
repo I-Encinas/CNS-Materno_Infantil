@@ -30,10 +30,10 @@ class EmployeeResource extends Resource
                     ->relationship(name:'service',titleAttribute:'name')
                     ->required()
                     ->preload()
-                    // ->options(User::all()->pluck('name', 'id'))
                     ->searchable('name'),
                 Forms\Components\TextInput::make('ci')
                     ->required()
+                    ->unique()
                     ->autocomplete(false)
                     ->maxLength(10),
                 Forms\Components\TextInput::make('name')
@@ -49,7 +49,8 @@ class EmployeeResource extends Resource
                 Forms\Components\TextInput::make('phone')
                     ->tel()
                     ->maxLength(15),
-            ])->columnSpan(['lg' => fn (?Employee $record) => $record === null ? 3 : 2])
+            ])
+            // ->columnSpan(['lg' => fn (?Employee $record) => $record === null ? 3 : 2])
             ;
     }
 

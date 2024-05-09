@@ -45,11 +45,13 @@ class UserResource extends Resource
                     ->email()
                     ->required()
                     ->maxLength(255),
-                Forms\Components\DateTimePicker::make('email_verified_at'),
+                // Forms\Components\DateTimePicker::make('email_verified_at'),
                 Forms\Components\TextInput::make('password')
                     ->password()
-                    ->required()
-                    ->hiddenOn('edit')
+                    ->required() 
+                    ->placeholder('De 8 caracteres')
+                    // ->creationRules(['nullable', 'string', 'min:8'])
+                    // ->hiddenOn('edit')
                     ->maxLength(255),
             ]);
     }

@@ -45,6 +45,7 @@ class SupplyResource extends Resource
                     ->searchable('name'),
                 Forms\Components\TextInput::make('code')
                     ->required()
+                    ->unique()
                     ->maxLength(20),
                 Forms\Components\TextInput::make('name')
                     ->required()

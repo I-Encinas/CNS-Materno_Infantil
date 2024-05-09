@@ -2,10 +2,12 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\OrderResource\Pages;
-use App\Filament\Resources\OrderResource\RelationManagers;
+use App\Filament\Resources\OrderIResource\Pages;
+use App\Filament\Resources\OrderIResource\RelationManagers;
 use App\Models\Order;
+use App\Models\OrderI;
 use Filament\Forms;
+use Filament\Forms\Components\Wizard;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -14,14 +16,15 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
 
-class OrderResource extends Resource
+class OrderIResource extends Resource
 {
     protected static ?string $model = Order::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $label = 'Internal Orders';
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->where('user_id', Auth::user()->id)->where('order_type_id', 1);
+        return parent::getEloquentQuery()->where('user_id', Auth::user()->id)->where('order_type_id', 2);
     }
     public static function form(Form $form): Form
     {
@@ -37,8 +40,8 @@ class OrderResource extends Resource
                 //     ->required()
                 //     ->searchable()
                 //     ->preload(),
-                Forms\Components\Toggle::make('status')
-                    ->required(),
+                // Forms\Components\Toggle::make('status')
+                //     ->required(),
                 Forms\Components\DateTimePicker::make('date_o')
                     ->label('Date')
                     ->required(),
@@ -94,10 +97,10 @@ class OrderResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListOrders::route('/'),
-            'create' => Pages\CreateOrder::route('/create'),
-            'view' => Pages\ViewOrder::route('/{record}'),
-            'edit' => Pages\EditOrder::route('/{record}/edit'),
+            'index' => Pages\ListOrderIS::route('/'),
+            'create' => Pages\CreateOrderI::route('/create'),
+            'view' => Pages\ViewOrderI::route('/{record}'),
+            'edit' => Pages\EditOrderI::route('/{record}/edit'),
         ];
     }    
 }
